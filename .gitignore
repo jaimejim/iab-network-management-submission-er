@@ -1,0 +1,16 @@
+.DS_Store
+iabart.cls
+Makefile
+paper.aux
+paper.bbl
+paper.blg
+paper.fdb_latexmk
+paper.fls
+paper.log
+paper.out
+paper.synctex.gz
+figs/.DS_Store
+figs/~$arch.pptx
+figs/~$etac-er.pptx
+figs/arch.pdf
+figs/arch.pptx
