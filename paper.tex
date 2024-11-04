@@ -9,7 +9,7 @@
 
 \begin{document}
 
-\title{Network Management Experiences}
+\title{TBD: NEMOPS Submission}
 
 
 \author{J. Doe}
@@ -41,7 +41,99 @@
 
 \begin{abstract}
 
+In this paper we provide ...
 
+\end{abstract}
+
+\keywords{network management, operations}
+
+\maketitle
+
+\section{Introduction} \label{introduction}
+
+The IAB workshop on the Next Era of Network Management Operations (NEMOPS) aims to foster communication between network operators and protocol developers, guiding the IETF in evolving network management protocols. This initiative seeks to evaluate past achievements and outline future requirements for network management operations.
+
+In this paper we introduce 
+
+% a cloud-native transport automation software solution designed to machine learning and open standards for advanced analytics and automation across microwave, IP, and optical fronthaul networks. The goal being to facilitate communication service providers the automation of their network operations, optimizing network performance, reducing costs, and enhancing end-user experiences.
+
+\subsection{Challenges} \label{introduction}
+
+% This subsection will introduce the next one, giving a very brief overview.
+% Maybe we write this at the end
+
+\subsection{Overal Architecture} \label{overview}
+
+% Provide a high-level description of the standard components found in a network management controller or system responsible for managing network endpoints.
+Note: common cites.  \cite{rfc8342}, NETCONF \cite{rfc6241}, and SNMP \cite{rfc3411} to ...
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figs/arch.pdf}
+  \caption{General Architecture}
+  \label{fig:overall_architecture}
+\end{figure}
+
+\section{Scalability} \label{scalability}
+
+% Challenges of scalability in network models/protocols/devices/systems
+% Optical equipment that can have up to 10,000 interfaces. Current models like YANG are inadequate due to limitations such as file databases without indexing.
+% There is a need for standardized network-level models that can be easily mapped to devices, facilitating scalability across various network architectures.
+% The integration of legacy systems remains a significant challenge, with many network nodes still relying on SNMP, necessitating adaptable and scalable solutions.
+
+
+\section{Telemetry} \label{telemetry}
+
+% The challenges of using UDP for telemetry.
+% Need for fine-grained control over data transmission.
+% Observability in retrieving records without overwhelming the DCN(?)
+% Handling of mmulti-protocol data and reporting mechanisms. Traps, YANG push, coap observe...
+% YANG to CBOR dictionary for compression and the implications of frequent notifications.
+% Signaling using lightweight protocols
+
+\section{Query Range} \label{queryrange} 
+
+% Importance of protocol-agnostic network modeling, which allows for a broad query range.
+% Database storage and retrieval. Time-series storage. 
+% The meeting discussed the differences between UML-defined models and those used in YANG, focusing on how these models can operate in a protocol-neutral manner.
+
+\section{Network Management Evolution} \label{insights}
+
+
+
+% Maybe GenAI and Intents?
+% Other db/api query languages? GraphQL
+% Other, new standard interfaces?
+% More closed-loop Automation?
+% Workflow Programmability and Network APIs (Ericsson message)?
+
+
+
+\textbf{IETF and other SDOs}
+
+% ITUT difference between the models we define in UML and the ones we used in YANG, how things work in a protocol neutral way (MIB, YANG…) the industry was not ready for it back then. If you have a practical example …
+
+
+
+\section{Conclusions} \label{conclusions}
+
+This paper provides an overview of ...
+
+\section{Acknowledgments}
+
+We would like to thank Ericsson for their support of this work. Special thanks to ...
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{paper}
+
+\end{document}
+\endinput
+
+
+% NOTES
+
+% ------------------------------------------------------------------------
+% WS CALL
+% ------------------------------------------------------------------------
 % Common protocol themes: YANG, YANG-Push, NMDA, NETCONF, RESTCONF, CORECONF, SZTP, Call-Home, YANG-Library
 
 % Current IETF network management topics:
@@ -65,80 +157,28 @@
 
 % Check examples in slides: https://ripe89.ripe.net/wp-content/uploads/presentations/47-RIPE89_Next_Era_of_Network_Management_Operations_Benoit_Claise.pptx
 
-In this paper we provide ...
+% ------------------------------------------------------------------------
 
-\end{abstract}
+% ------------------------------------------------------------------------
+% MEETING Nov4
+% ------------------------------------------------------------------------
 
-\keywords{network management, operations}
+% NEMOPS Paper
+% Signaling using lightweight protocols
+% IVY topic
+% Mention a bit the liaison, industry recognize center of competence. Connection between IETF, … ITUT
+% - Scalability
+% - Query range
+% - Telemetry
 
-\maketitle
+% ETAC Telemetry: UDP examples of struggles and issues, fine-grained granular control of what gets push. High level describe what we do currently.  The reality of when developing these products you have to live in the legacy and the new world. Adaptors, many items in nodes are still SNMP, the reality is that u have to deal with a lot of legacy. Network modeling can be agnostic of the protocol used, network modeling can be abstracted to the method u use to the network elements.
 
-\section{Introduction} \label{introduction}
+% ITUT difference between the models we define in UML and the ones we used in YANG, how things work in a protocol neutral way (MIB, YANG…) the industry was not ready for it back then. If you have a practical example …
 
-The IAB workshop on the Next Era of Network Management Operations (NEMOPS) aims to foster dialogue between network operators and protocol developers, guiding the IETF in evolving network management protocols. This initiative seeks to evaluate past achievements and outline future requirements for network management operations.
+% Internally we have an adaptation layer towards the managed devices. 
+% Scott: standardize that?
+% When defining those network level models there should be a mapping between those network level models and device, so that they can be mapped easily. Scalability: optical equipment with 10k interfaces YANG does every poorly. File database with no indexing. Scott has a press about that. Redo the modeling of the bridge. 
+% Compression: YANG to CBOR, something to think, if net elements notifications every 10s the smaller the better, fits also with the telemetry topic.
 
-In this paper we introduce a cloud-native transport automation software solution designed to machine learning and open standards for advanced analytics and automation across microwave, IP, and optical fronthaul networks. The goal being to facilitate communication service providers the automation of their network operations, optimizing network performance, reducing costs, and enhancing end-user experiences.
-
-
-\section{ETAC Overview?} \label{overview}
-
-Depending on how deep we can get on what we can say at IETF, we may scope the paper accordingly
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.5\textwidth]{figs/arch.pdf}
-  \caption{General Architecture}
-  \label{fig:overall_architecture}
-\end{figure}
-
-% Sample placeholder image
-
-This section presents an overview
-
-\textbf{Participating Entities}
-
-% high level
-We define three primary entities
-
-\begin{itemize}
-  \item \textbf{one}: Typically a ...
-\end{itemize}
-
-
-\section{Protocol Insights} \label{insights}
-
-% Network Automation
-% Network Analytics/Visibility
-% Maybe ML?
-% RESTCONF/CORECONF (compression YANG/CBOR)
-
-\textbf{Current IETF protocols used}
-
-We use protocols such as NMDA \cite{rfc8342}, NETCONF \cite{rfc6241}, and SNMP \cite{rfc3411} to ...
-
-
-% Perhaps mention ETAC and keep it light and only present what needs to be presented.
-Our solution is built upon...
-
-
-\section{Protocol Evolution} \label{insights}
-
-% Maybe GenAI and Intents?
-% More standard interfaces?
-% More closed-loop Automation
-% Workflow Programmability and Network APIs (Ericsson message)
-
-
-\section{Conclusions} \label{conclusions}
-
-This paper provides an overview of ...
-
-\section{Acknowledgments}
-
-We would like to thank Ericsson for their support of this work. Special thanks to ...
-
-\bibliographystyle{ACM-Reference-Format}
-\bibliography{paper}
-
-\end{document}
-\endinput
+% Telemetry: Observability to get back records. Do not want to kill the DCN. When you get stuff back, you have a value and put it somewhere, you can do traps, yang push, if you put it in a database, I don’t know if we have standard that maps it to that. Tool somewhere that maps. RESTCONF: Got stop time-series databases and relational databases. 
+% GraphQL
