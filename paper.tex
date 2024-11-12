@@ -199,15 +199,22 @@ One unfortunate reality is that some network devices in life networks are actual
 % Workflow Programmability and Network APIs (Ericsson message)?
 
 
-\textbf{Generative AI}
+\textbf{AI Agents}
 
-Generative AI (GenAI) is set to transform network management by incorporating AI systems that follow the autonomic networking principles outlined RFC7575.
+Zero-shot LLMs are are already used to make operator insights more accessible, to streamline incident management or to generate task-specific code from natural language queries. As the industry progresses in the GenAI path, agentic architectures will be integrated into network AI systems, adhering to the autonomic networking principles specified in RFC7575.
 
 \begin{quote}
 "The fundamental goal is self-management, including self-configuration, self-optimization, self-healing, and self-protection." \cite{RFC7575}
 \end{quote}
 
-Agentic architectures, characterized by AI agents that autonomously discover and utilize tools provide dynamic interactions with complex systems, effectively adapting to changes that static codebases cannot. AI agents are capable of decomposing user intents into executable individual steps and can interact autonomously with other systems through well-known interfaces (e.g., Network and Management APIs). Agents can further federate and specialize in multi-agent systems, which improve on challenges such as hallucinations, specialization, and scalability. The interest in multi-agent systems was reflected during the past IETF 121 side meeting, as detailed in the ai4network agenda \cite{ai4network-agenda}. 
+Agentic systems are characterized by AI agents that are capable of decomposing user intents into executable individual steps and can interact autonomously with other systems through well-known interfaces (e.g., Network and Management APIs). Agents can further federate and specialize in multi-agent systems, which improve on challenges such as hallucinations, specialization, and scalability. The interest in multi-agent systems was reflected during the past IETF 121 side meeting, as detailed in the ai4network agenda \cite{ai4network-agenda}. 
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figs/agent.png}
+  \caption{Agentic System Architecture}
+  \label{fig:agent_architecture}
+\end{figure}
 
 Agents are particularly useful in the telecommunications sector, where the complexity of specifications and codebases demands innovative solutions. Moreover, the current trend in 5G Networks is marked by a shift towards exposing network functionalities through APIs. This trend facilitates the integration of agentic systems that can dynamically interact with these APIs.
 
