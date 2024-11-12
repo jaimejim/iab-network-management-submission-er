@@ -56,8 +56,7 @@
 
 \begin{abstract}
 
-This paper explores network management challenges and solutions, emphasizing scalability, telemetry, and security. It underscores the impact of AI and machine learning in enhancing operations via platforms like the Ericsson Transport Automation Controller (ETAC). The discussion includes legacy system complexities and diverse data sources, advocating for standardized schemas and efficient data streaming. It also covers the transition to zero-trust architectures and generative AI, highlighting the need for collaboration to create scalable, secure, and interoperable solutions. These insights aim to guide the industry in meeting modern telecommunications demands.
-
+This paper presents a comprehensive analysis of the evolving challenges and emerging solutions in network management. We explore scalability issues in network models and protocols, emphasizing the limitations of current implementations like YANG and the need for standardized, extendable models. Telemetry complexities are discussed, focusing on data quality, diversity, and lineage, and the necessity for efficient data streaming and standardized schemas. Security challenges are addressed in the context of diverse protocols and the transition towards zero-trust architectures, highlighting the importance of unified security mechanisms and continuous updates. We also examine the future of network management, including the integration of generative AI and agentic architectures that adhere to autonomic networking principles, as well as new standard interfaces like CoRECONF. Our findings underscore the imperative for scalable, secure, and interoperable solutions that can adapt to the dynamic demands of modern telecommunications networks.
 
 \end{abstract}
 
@@ -67,9 +66,9 @@ This paper explores network management challenges and solutions, emphasizing sca
 
 \section{Introduction} \label{introduction}
 
-The IAB workshop on the Next Era of Network Management Operations (NEMOPS) serves as a pivotal platform for fostering dialogue between network operators and protocol developers. This initiative is instrumental in guiding the Internet Engineering Task Force (IETF) as it evolves network management protocols. The workshop's primary objectives are to assess past achievements and delineate future requirements for network management operations.
+The IAB workshop on the Next Era of Network Management Operations (NEMOPS) serves as a platform for discussion between network operators and protocol developers. This workshop is expected to guide the Internet Engineering Task Force (IETF) standards process. The workshop's primary objectives are to assess past achievements and delineate future requirements for network management operations.
 
-In this paper, we introduce a comprehensive analysis of the current challenges and emerging solutions in network management. The subsequent sections delve into various facets of network management and operations. The \textbf{Overall Architecture} section \ref{overview} provides a detailed overview of the standard components within a network management controller, focusing on the Ericsson Transport Automation Controller (ETAC) and its integration with other network elements. The \textbf{Scalability} section \ref{scalability} examines the challenges of scaling network models and protocols, highlighting the need for standardized models. The \textbf{Telemetry} section \ref{telemetry} discusses the complexities of data transmission and the importance of efficient data streaming. The \textbf{Security} section \ref{security} addresses the diverse security protocols and the shift towards zero-trust architectures. Finally, the \textbf{Network Management Evolution} section \ref{insights} explores future trends, including the role of generative AI and new standard interfaces.
+In this paper, we introduce a comprehensive analysis of the current challenges and emerging solutions in network management from the point of view of an SDN controller product. The subsequent sections delve into various aspects of network management and operations. The \textbf{Overall Architecture} section \ref{overview} provides a detailed overview of the standard components within a network management controller, the Ericsson Transport Automation Controller (ETAC). The \textbf{Scalability} section \ref{scalability} examines the challenges of scaling network models and protocols, highlighting the need for standardized models. The \textbf{Telemetry} section \ref{telemetry} discusses the complexities of data transmission. The \textbf{Security} section \ref{security} raises some security challenges and explains the shift towards zero-trust architectures. Finally, the \textbf{Network Management Evolution} section \ref{insights} explores potential future trends, including the role of generative AI and new standard interfaces.
 
 \subsection{ETAC overal Architecture} \label{overview}
 
@@ -159,11 +158,7 @@ Modern network elements have a lot of state-data which can not be efficiently le
 
 TBD!
 
-\section{Security} \label{security}
-
-
-
-\textbf{Security challenges}
+\section{Security challenges} \label{security}
 
 Security configuration in network management is complex due to the absence of a unified infrastructure. This complexity arises from the need to support multiple security protocols across diverse devices and vendors. Key points include:
 
