@@ -4,14 +4,14 @@
 \usepackage[skip=4pt plus1pt]{parskip}
 %\copyrightyear{2024}
 \acmYear{2024}
-\setcopyright{acmlicensed}\acmConference[IAB Network Management WS]{The IAB Next Era of Network Management Operations}{December 3, 2024}{}
+%\setcopyright{acmlicensed}\acmConference[IAB Network Management WS]{The IAB Next Era of Network Management Operations}{December 3, 2024}{}
 %\acmBooktitle{The IAB next Era of Network Management Workshop}{December 3, 2024}{}
 
 \begin{document}
 
 
 \title{Evolving Challenges and Solutions in Network Management}
-
+% Define short authors for page header
 \shortauthors{Jiménez et al}
 
 \author{Jaime Jiménez}
@@ -66,7 +66,7 @@
 
 \begin{abstract}
 
-This paper presents a comprehensive analysis of the evolving challenges and emerging solutions in network management. We explore scalability issues in network models and protocols, emphasizing the limitations of current implementations like YANG and the need for standardized, extendable models. Telemetry complexities are discussed, focusing on data quality, diversity, and lineage, and the necessity for efficient data streaming and standardized schemas. Security challenges are addressed in the context of diverse protocols and the transition towards zero-trust architectures, highlighting the importance of unified security mechanisms and continuous updates. We also examine the future of network management, including the integration of generative AI and agentic architectures that adhere to autonomic networking principles, as well as new standard interfaces like CoRECONF. Our findings underscore the imperative for scalable, secure, and interoperable solutions that can adapt to the dynamic demands of modern telecommunications networks.
+This paper presents an analysis of the evolving challenges and emerging solutions in network management. We explore scalability issues in network models and protocols, emphasizing the some limitations of current implementations the need for standardized, extendable information models. Telemetry complexities are discussed, focusing on data quality, diversity, and lineage, and the necessity for efficient data streaming and standardized schemas. Security challenges are addressed in the context of diverse protocols and the transition towards zero-trust architectures, highlighting the importance of unified security mechanisms and continuous updates. We also examine the future of network management, including the integration of generative AI and agentic architectures that adhere to autonomic networking principles, as well as the possibilities of new standard interfaces like CoRECONF. Our findings highlight the imperative for scalable, secure, and interoperable solutions that can adapt to the dynamic demands of modern telecommunications networks.
 
 \end{abstract}
 
@@ -76,7 +76,7 @@ This paper presents a comprehensive analysis of the evolving challenges and emer
 
 \section{Introduction} \label{introduction}
 
-The IAB workshop on the Next Era of Network Management Operations (NEMOPS) serves as a platform for discussion between network operators and protocol developers. This workshop is expected to guide the Internet Engineering Task Force (IETF) standards process. The workshop's primary objectives are to assess past achievements and delineate future requirements for network management operations.
+The IAB workshop on the Next Era of Network Management Operations (NEMOPS) serves as a platform for discussion between network operators, protocol experts and the general network management community. This workshop is expected to guide the Internet Engineering Task Force (IETF) standards process. The workshop's primary objectives are to assess past achievements and delineate future requirements for network management operations.
 
 In this paper, we introduce a comprehensive analysis of the current challenges and emerging solutions in network management from the point of view of an SDN controller product. The subsequent sections delve into various aspects of network management and operations. The \textbf{Overall Architecture} section \ref{overview} provides a detailed overview of the standard components within a network management controller, the Ericsson Transport Automation Controller (ETAC). The \textbf{Scalability} section \ref{scalability} examines the challenges of scaling network models and protocols, highlighting the need for standardized models. The \textbf{Telemetry} section \ref{telemetry} discusses the complexities of data transmission. The \textbf{Security} section \ref{security} raises some security challenges and explains the shift towards zero-trust architectures. Finally, the \textbf{Network Management Evolution} section \ref{insights} explores potential future trends, including the role of generative AI and new standard interfaces.
 
@@ -95,10 +95,9 @@ The \textbf{Ericsson Transport Automation Controller (ETAC)} \cite{ericsson-etac
 
 On the SBI it communicates with the managed nodes and it also is capable of translating between specific device information models and the harmonized, standards-based information model used in a network database. The Network Intelligence layer builds on top of this harmonized model, implementing the analytics, automation and SDN control application supported in the system. 
 
-On the NBI it offers an exposure layer to human users over a friendly GUI as well as to various OSS applications, providing access both to the network data and to the functionality supported in the system and enabling integration with other platforms. 
+On the NBI it offers an exposure layer to users over a friendly GUI as well as to various OSS applications, providing access both to the network data and to the functionality supported in the system and enabling integration with other platforms. 
 
 ETAC supports both SBI and NBI through implementations that accommodate legacy protocols and information models, whether defined by SOD or specific to vendors. It also provides real-time network observability, facilitating network analytics and closed-loop automation. It currently supports use cases that utilize its built-in real-time observability features to gain network insights through AI/ML and implement closed-loop automation in Transport Networks, all within a zero-trust framework.
-
 
 \section{Scalability} \label{scalability}
 
@@ -133,19 +132,23 @@ The efficient and scalable transfer of analytics data from its source to post-pr
 
 \textbf{Quality of data} 
 
-Legacy network elements generate data that is not optimized for modern IT-style post-processing analytics systems. This data requires embedded metadata within its schema to support long-term storage and external post-processing, detailing the "what, where, when, and by whom," and identifying the precise source, such as a container, pod, application, node, or CaaS-cluster.
+The alignment of analytics data schemas and metadata is essential for efficient post-processing and analytics. Minor differences, such as variations in timestamp formats, can pose challenges. The adoption of standardized, extendable schemas and encodings for various analytics data types would facilitate streamlined data processing across different vendor systems.
 
-Currently, the lack of alignment in analytics data schemas and metadata complicates and increases the cost of post-processing and analytics. Simple discrepancies, like varying timestamp formats, can cause significant issues. Ideally, standardized, extendable schemas and encodings for different analytics data types would simplify data processing across diverse vendor systems.
+Legacy network elements produce data that may not be fully compatible with modern IT-style post-processing analytics systems. To enhance compatibility, it is beneficial for this data to include embedded metadata providing details such as data originator.
 
-Reliability of telemetry data may be less critical when used for visualization purposes and manual check-ups, however, it becomes crucial once telemetry is used as input for AI training and assisted network configuration
+Lastly, while the reliability of telemetry data may be less critical for visualization and manual inspections, it becomes essential when utilized for AI training and assisted network configuration.
 
 \textbf{Diversity of data} 
 
-Currently, analytic data is accessed through various APIs and follows diverse patterns (e.g., file harvesting, SNMP for FM data streaming, state notifications via NETCONF/RESTCONF, etc). This diversity complicates data collection and ingestion processes. There is a pressing need for an efficient, scalable, and universal transfer system to stream analytics data from its source to post-processing systems. This system must be optimized for bandwidth and CPU efficiency, ensure security, and be applicable to all types of analytics data streams, including metrics, events (e.g., alarms and notifications), logs, and state data.
+Analytic data is often accessed through a variety of interfaces and standards. This variety presents challenges in streamlining data collection and ingestion processes. This is also true for including metrics which come in various forms like events, alarms, notifications, publications webhooks, logs, and other resource state data.
+
+There is therefore need for an efficient, scalable, and universal transfer system to stream analytics data from its source to post-processing systems.
 
 \textbf{Lineage of data}
 
-It is essential to establish the lineage and integrity of any record used for purposes beyond visualization. Utilizing data with uncertain integrity can introduce new attack vectors, such as enabling adversaries to exploit closed-loop automation by manipulating the input data. It is important to note that analytics data may flow directly from the source to the post-processing system; however, there are instances where data may traverse cloud provider PaaS functions. Therefore, a mechanism to ensure data integrity across multiple domains is necessary.
+It is essential to establish the lineage and integrity of any record used for purposes beyond visualization. Utilizing data with uncertain integrity can introduce new attack vectors, such as enabling adversaries to exploit closed-loop automation by manipulating the input data. 
+
+Ensuring data integrity across multiple domains is crucial, especially when analytics data traverses cloud provider PaaS functions before reaching post-processing systems.
 
 \textbf{State-Data Handling}
 
@@ -170,17 +173,16 @@ Modern network elements have a lot of state-data which can not be efficiently le
 Security configuration in network management is complex due to the absence of a unified infrastructure. This complexity arises from the need to support multiple security protocols across diverse devices and vendors. Albeit rare, some challenges include:
 
 \begin{itemize}
-    \item \textbf{Diverse Protocols:} Network management applications must accommodate various security protocols, such as TLS, SSH, and username/password mechanisms.
-    \item \textbf{TLS Potential:} TLS, especially with client-server certificates, is a strong candidate for unified security but lacks universal support across all network management protocols and devices. % This was misswritten, my proposal, just say TLS/DTLS as universal stack (better no VPN)
-    \item \textbf{SSH Limitations:} There is no security infrastructure available that would distribute and help verifying the SSH public keys and facilitate flexible re-keying.The security configuration of SSH itself remains to be manual. % verify this statement
-    \item \textbf{Username/Password:} Widely used for basic access and protocols like SNMPv3. Mechanisms for centralized authentication exists but cannot completely replace the need for local authentication because centralized mechanisms may not be always available. Manual security configuration leads easily to poor security practises as key renewals, password upgrades are easily neglected simply because it is error prone and expensive.
+    \item \textbf{Diverse Protocols:} Network management applications must accommodate various security protocols, such as TLS/DTLS, SSH, and username/password mechanisms.
+    \item \textbf{TLS/DTLS:} TLS/DTLS, particularly with client-server certificates, is a promising candidate for unified security. However, some vendors opt for alternative security techniques, such as VPNs.
+    \item \textbf{SSH Limitations:} There is no security infrastructure available that would distribute and help verifying the SSH public keys and facilitate flexible re-keying.The security configuration of SSH itself remains to be manual. % verify this statement there are things like hashicorp https://www.vaultproject.io
+    \item \textbf{Username/Password:} Commonly used for basic access and protocols like SNMPv3. Centralized authentication exists but cannot fully replace local authentication due to potential unavailability. Manual configuration often results in poor security practices, as key renewals and password updates are prone to errors and costly.
 
 \end{itemize}
  
+\textbf{Legacy security}
 
-\textbf{Standardization process}
-
-The transition from standards to widespread network deployment is often very slow, particularly when new standards are to replace existing components. While implementing a new mechanism on a single device can be swift, updating all network devices is time-consuming. Management applications typically require market adoption or commitment to the new mechanism before implementation is deemed worthwhile. For this reason, phasing out legacy security mechanisms is challenging.
+The transition from standards to widespread network deployment is often very slow, particularly when new standards are to replace existing components. Additionally, management applications often necessitate market adoption or commitment to the new mechanism before its implementation is considered worthwhile. Consequently, phasing out legacy security mechanisms can be challenging.
  
 \textbf{Zero-Trust Architecture}
 
@@ -193,22 +195,22 @@ One unfortunate reality is that some network devices in life networks are actual
  
 \section{Network Management Evolution} \label{insights}
 
-% TODO: Brief intro
+The evolution of network management could be influenced by advancements in AI and machine learning, as well as potential retrofitting of other protocols intended for constrained environments. These developments promise enhanced automation and scalability for telecommunications networks.
 
 \textbf{AI Agents}
 
-Zero-shot LLMs are are already used to make operator insights more accessible, to streamline incident management or to generate task-specific code from natural language queries. As the industry progresses in the GenAI path, agentic architectures will be integrated into network AI systems, adhering to the autonomic networking principles specified in RFC7575.
+Zero-shot LLMs are are already used to make operator insights more accessible, to streamline incident management or to generate task-specific code from natural language queries. As the industry progresses in the recent GenAI path, agentic architectures will be integrated into network AI systems, adhering to the autonomic networking principles specified in RFC7575 \cite{RFC7575}.
 
 \begin{quote}
-"The fundamental goal is self-management, including self-configuration, self-optimization, self-healing, and self-protection." \cite{RFC7575}
+"The fundamental goal is self-management, including self-configuration, self-optimization, self-healing, and self-protection." 
 \end{quote}
 
 Agentic systems are characterized by AI agents that are capable of decomposing user intents into executable individual steps and can interact autonomously with other systems through well-known interfaces (e.g., Network and Management APIs). Agents can further federate and specialize in multi-agent systems, which improve on challenges such as hallucinations, specialization, and scalability. The interest in multi-agent systems was reflected during the past IETF 121 side meeting, as detailed in the ai4network agenda \cite{ai4network-agenda}. 
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.5\textwidth]{figs/agent.png}
-  \caption{Agentic System Architecture}
+  \includegraphics[width=0.5\textwidth]{figs/agent.pdf}
+  \caption{Agent Architecture}
   \label{fig:agent_architecture}
 \end{figure}
 
@@ -216,20 +218,24 @@ Agents are particularly useful in the telecommunications sector, where the compl
 
 \textbf{CoRECONF}
 
-The -CONF ecosystem comprises the following components:
+CoRECONF, in particular,is utilized by constrained devices in Low-Power and Lossy Networks, which are typically composed of numerous embedded devices with limited power and memory. 
+
+The the Constrained Application Protocol (CoAP) \cite{RFC7252}, a component of CoRECONF, is primarily utilized in IoT applications, it has also been specified for signaling DDoS-related telemetry \cite{RFC9132} and \cite{RFC9362}, as documented by the now-concluded DOTS Working Group. 
+
+Within the network management community, the -CONF ecosystem is predominantly characterized by the widespread deployment of NETCONF and RESTCONF for network management tasks. In contrast, CoRECONF is not as widely know. The main differences being the application protocol and the serializations:
+
 \begin{itemize}
   \item \textbf{NETCONF} \cite{RFC6241}: Serializing YANG over a stateful TCP connection.    
   \item \textbf{RESTCONF} \cite{RFC8040}: Serializing YANG over stateless HTTP.
   \item \textbf{CoRECONF} \cite{draft-ietf-core-comi}: Serializing YANG modules in a CBOR \cite{RFC9254} map over stateless CoAP.
 \end{itemize}
 
-CoRECONF, in particular,is utilized by constrained devices in Low-Power and Lossy Networks, which are typically composed of numerous embedded devices with limited power and memory. Although primarily used for IoT, CoAP has also been specified for the signaling of DDoS-related telemetry \cite{RFC9132} and \cite{RFC9362}, as outlined in the now-concluded DOTS Working Group. 
-
 This suggests potential applications for retrofitting CoAP on telemetry or management-type signaling within the network management domain. Specially in UDP-oriented evinronments as CoAP comes with an additional reliability mechanism and in environments where compression and smaller payloads are welcomed. 
 
 \section{Conclusions} \label{conclusions}
 
 % TODO: improve
+
 This paper has explored the evolving landscape of network management, highlighting the challenges and solutions in scalability, telemetry, and security. The integration of advanced technologies such as AI and machine learning within platforms like the Ericsson Transport Automation Controller (ETAC) demonstrates the potential for enhanced analytics and automation in network operations. However, the complexity of legacy systems and the diversity of data sources present significant hurdles that require innovative approaches, such as standardized schemas and efficient data streaming mechanisms.
 
 The transition towards zero-trust architectures and the adoption of generative AI indicate a shift towards more secure and autonomous network management systems. These advancements necessitate a collaborative effort between industry stakeholders and standardization bodies to ensure seamless integration and widespread adoption. As the network management domain continues to evolve, the focus must remain on developing scalable, secure, and interoperable solutions that can adapt to the dynamic demands of modern telecommunications networks.
