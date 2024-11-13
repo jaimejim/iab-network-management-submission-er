@@ -1,10 +1,10 @@
-\documentclass[11pt,sigconf]{iabart}
+\documentclass[10pt,sigconf]{iabart}
 %\documentclass[10pt,sigconf,letterpaper]{acmart}
 %\usepackage[vskip=1em,font=itshape,leftmargin=2em,rightmargin=2em]{quoting}
 \usepackage[skip=4pt plus1pt]{parskip}
 %\copyrightyear{2024}
-%\acmYear{2024}
-%\setcopyright{acmlicensed}\acmConference[IAB Network Management WS]{The IAB Next Era of Network Management Operations}{December 3, 2024}{}
+\acmYear{2024}
+\setcopyright{acmlicensed}\acmConference[IAB Network Management WS]{The IAB Next Era of Network Management Operations}{December 3, 2024}{}
 %\acmBooktitle{The IAB next Era of Network Management Workshop}{December 3, 2024}{}
 
 \begin{document}
@@ -12,10 +12,12 @@
 
 \title{Evolving Challenges and Solutions in Network Management}
 
+\shortauthors{Jiménez et al}
+
 \author{Jaime Jiménez}
 \email{jaime.jimenez@ericsson.com}
 \orcid{0009-0008-2864-4269}
-\affiliation{%
+\affiliation{\small %
   \institution{Ericsson, ER}
   \city{Jorvas}
   \country{Finland}
@@ -23,7 +25,7 @@
 
 \author{Scott Mansfield}
 \email{scott.mansfield@ericsson.com}
-\affiliation{%
+\affiliation{\small %
   \institution{Ericsson, BNEW TS ST}
   \city{Jorvas}
   \country{Finland}
@@ -31,7 +33,7 @@
 
 \author{Raquel Rodriguez A}
 \email{raquel.a.rodriguez@ericsson.com}
-\affiliation{%
+\affiliation{\small %
   \institution{Ericsson, ETAC}
   \city{Jorvas}
   \country{Finland}
@@ -39,7 +41,7 @@
 
 \author{Mikko Pesonen}
 \email{mikko.pesonen@ericsson.com}
-\affiliation{%
+\affiliation{\small %
   \institution{Ericsson, ETAC}
   \city{Jorvas}
   \country{Finland}
@@ -47,7 +49,15 @@
 
 \author{Vesa Torvinen}
 \email{Vesa.Torvinen@ericsson.com}
-\affiliation{%
+\affiliation{\small %
+  \institution{Ericsson, ETAC}
+  \city{Jorvas}
+  \country{Finland}
+}
+
+\author{Janne Karvonen}
+\email{janne.karvonen@ericsson.com}
+\affiliation{\small %
   \institution{Ericsson, ETAC}
   \city{Jorvas}
   \country{Finland}
@@ -60,7 +70,7 @@ This paper presents a comprehensive analysis of the evolving challenges and emer
 
 \end{abstract}
 
-\keywords{network management, scalability, telemetry, security, AI, zero-trust, interoperability}
+\keywords{Network Management, Scalability, Telemetry, Security, AI, Zero-Trust, Interoperability}
 
 \maketitle
 
@@ -81,32 +91,26 @@ Ericsson Transport Automation Controller (ETAC) ~\cite{ericsson-etac} is a cloud
   \label{fig:overall_architecture}
 \end{figure}
 
+The \textbf{Ericsson Transport Automation Controller (ETAC)} \cite{ericsson-etac} adheres to the Open Transport SDN Reference Architecture as delineated by the TIP MUST project, aligning with the principles outlined in the Open Transport Architecture Whitepaper \cite{open_transport_architecture_whitepaper}. ETAC supports the roles of both the SDN Domain Controller and the SDN Hierarchical Controller, in accordance with the objectives of the Open Optical \& Packet Transport (OOPT) initiative \cite{oopt}. At high-level, it has two main Integration parts the Northound Integration part (NBI) and the Southbound Integration part (SBI) both of which use well-known standard interfaces and protocols like \textbf{NETCONF/YANG} \cite{RFC6241, rfc6020}, \textbf{RESTCONF} \cite{RFC8040}, \textbf{SNMP} \cite{RFC1157}, \textbf{SFTP} \cite{RFC4253} or \textbf{HTTP/S} \cite{RFC7230} towards APIs.
 
-The \textbf{Ericsson Network Manager (ENM)} is a centralized platform responsible for managing network and service discovery, as well as collecting performance metrics. ENM interfaces with network elements like microwave nodes, known as \textbf{MINI-LINK}, to gather critical performance management (PM) data using \textbf{SFTP} \cite{RFC4253}.
+On the SBI it communicates with the managed nodes and it also is capable of translating between specific device information models and the harmonized, standards-based information model used in a network database. The Network Intelligence layer builds on top of this harmonized model, implementing the analytics, automation and SDN control application supported in the system. 
 
-ENM also exposes network topology and service information to external systems through its Configuration Management Northbound Interface (CM NBI) over \textbf{HTTP/S} \cite{RFC7230}, enabling seamless integration with other platforms. This allows \textbf{Network Management Users} to monitor and control the network environment via a secure web-based interface.
+On the NBI it offers an exposure layer to human users over a friendly GUI as well as to various OSS applications, providing access both to the network data and to the functionality supported in the system and enabling integration with other platforms. 
 
-On the other side of the ecosystem lies the \textbf{ETAC} platform \cite{ericsson-etac}, an AI-enhanced tool designed to provide deeper insights and advanced analytics. ETAC communicates with ENM to retrieve PM data via \textbf{SFTP} \cite{RFC4253}, ensuring it has the necessary information to optimize network performance. ETAC also interfaces with MINI-LINK directly, using \textbf{SNMP} \cite{RFC1157} to receive real-time microwave link parameters. These parameters help ETAC maintain a granular view of the network's operational status.
-
-Furthermore, ETAC leverages \textbf{NETCONF/YANG} \cite{RFC6241, rfc6020} to configure and manage RDS (Radio Data System) and service parameters within MINI-LINK. This protocol enables precise, programmatic control over network devices, aligning with the industry's shift towards more automated and dynamic network configurations.
-
-Finally, both platforms provide secure \textbf{HTTP/S} \cite{RFC7230} interfaces for their respective user bases—ENM for Network Management Users and ETAC for ETAC-specific users. 
+ETAC supports both SBI and NBI through implementations that accommodate legacy protocols and information models, whether defined by SOD or specific to vendors. It also provides real-time network observability, facilitating network analytics and closed-loop automation. It currently supports use cases that utilize its built-in real-time observability features to gain network insights through AI/ML and implement closed-loop automation in Transport Networks, all within a zero-trust framework.
 
 
 \section{Scalability} \label{scalability}
 
-% Challenges of scalability in network models/protocols/devices/systems
-% Optical equipment that can have up to 10,000 interfaces. Current models like YANG are inadequate due to limitations such as file databases without indexing.
-% There is a need for standardized network-level models that can be easily mapped to devices, facilitating scalability across various network architectures.
-% The integration of legacy systems remains a significant challenge, with many network nodes still relying on SNMP, necessitating adaptable and scalable solutions.
-% Stateful connections vs stateless
+% SCOTT please check this
+Scalability in network models, protocols, devices, and systems is a complex issue. For example, optical equipment can have up to 10,000 interfaces, but current models like YANG often fall short because they use file databases without indexing. This highlights the need for standardized network-level models that can be easily mapped to devices, improving scalability across different network architectures. Additionally, integrating legacy systems is a significant challenge, as many network nodes still rely on SNMP, which calls for adaptable and scalable solutions. The difference between stateful and stateless connections adds another layer of complexity to scalability efforts.
  
 
 \textbf{YANG Schema Mount}
 
 Scalability in YANG presents significant challenges, as highlighted by Boyd \cite{boyd2023scalable}. The concern is about the viability of the current implementation of YANG Schema Mount \cite{RFC8528} and the need to support a mechanism that is better suited for partitioning the data in the hierarchical data tree.
 
-% This needs to be rewritten to human-level of understanding.
+% TODO: This needs to be rewritten more clearly
 Even an enhanced solution for this issue will really only be solved by a better underlying modeling implementation including ACID/transactional, time-series, object-relational views with a query-language and the ability to add triggers or embedded code that becomes part of the solution. The complexity of YANG is intensifying, largely driven by its hierarchical architecture.
 
 \textbf{Efficient Data Streaming for Analytics}
@@ -116,16 +120,16 @@ The efficient and scalable transfer of analytics data from its source to post-pr
 
 \section{Telemetry} \label{telemetry}
 
+
+% TODO: BRIEF Intro
 % The challenges of using UDP for telemetry.
 % Need for fine-grained control over data transmission.
-% Observability in retrieving records without overwhelming the DCN(?)
-% Handling of mmulti-protocol data and reporting mechanisms. Traps, YANG push, coap observe...
+% Handling of mmulti-protocol data and reporting mechanisms. Traps, YANG push, webhooks
 % YANG to CBOR dictionary for compression and the implications of frequent notifications.
 % Signaling using lightweight protocols
 
-
-% Concise Binary Object Representation (CBOR) compresses YANG modules for transmission via the Constrained Application Protocol (CoAP) \cite{RFC9254, rfc7252}. This is advantageous for devices in Low-Power and Lossy Networks (LLNs), which have limited power and memory. CBOR optimizes data transmission and enhances network efficiency in such environments.
-
+% TODO: IMO the data part is to heavy with content specific for ETAC. We sould need some high-level general issues.
+% SCOTT, please input here.
 
 \textbf{Quality of data} 
 
@@ -145,28 +149,31 @@ It is essential to establish the lineage and integrity of any record used for pu
 
 \textbf{State-Data Handling}
 
-% This needs to be rewritten more clearly
+% TODO: This needs to be rewritten more clearly
 In passive data sources where analytics data is just exposed (as opposite to streamed) the data has to be actively harvested by external entities, thus there must be APIs or interfaces for collection of such data. In systems where data is streamed, the data sources (often involved in critical functions such as traffic handling) do not need to expose interfaces for harvesting analytics data, which makes the attack surface smaller and system more secure in general.
 
 Modern network elements have a lot of state-data which can not be efficiently leveraged through config model notifications. There are components and elements in the applications/data sources, which one does not to expose in a model, but still the analytics data about the state of such components should be available for post-processing systems. For example, one ideally would like to keep the model of cloud service realization agnostic, and use the same model for the cloud service, whether the application-instances of those services run in virtual machines or in container. Having to model compute resources in order to convey the state data would make it very tricky to separate realization and model from each other, and keep the model backwards compatible as the application realizations evolve and technologies change.
 
-\section{Query Range} \label{queryrange} 
+% \section{Query Range} \label{queryrange} 
 
-% Importance of protocol-agnostic network modeling, which allows for a broad query range.
-% Database storage and retrieval. Time-series storage. 
-% The meeting discussed the differences between UML-defined models and those used in YANG, focusing on how these models can operate in a protocol-neutral manner.
+% % Importance of protocol-agnostic network modeling, which allows for a broad query range.
+% % Database storage and retrieval. Time-series storage. 
+% % The meeting discussed the differences between UML-defined models and those used in YANG, focusing on how these models can operate in a protocol-neutral manner.
 
-TBD!
+% TBD!
+
+
+% TODO: Update Security by ETAC
 
 \section{Security challenges} \label{security}
 
-Security configuration in network management is complex due to the absence of a unified infrastructure. This complexity arises from the need to support multiple security protocols across diverse devices and vendors. Key points include:
+Security configuration in network management is complex due to the absence of a unified infrastructure. This complexity arises from the need to support multiple security protocols across diverse devices and vendors. Albeit rare, some challenges include:
 
 \begin{itemize}
     \item \textbf{Diverse Protocols:} Network management applications must accommodate various security protocols, such as TLS, SSH, and username/password mechanisms.
-    \item \textbf{TLS Potential:} TLS, especially with client-server certificates, is a strong candidate for unified security but lacks universal support across all network management protocols and devices. %IS THIS TRUE???
-    \item \textbf{SSH Limitations:} there is no security infrastructure available that would distribute and help verifying the SSH public keys and facilitate flexible re-keying.The security configuration of SSH itself remains to be manual.
-    \item \textbf{Username/Password Usage:} Widely used for basic access and protocols like SNMPv3. Mechanisms for centralized authentication exists but cannot completely replace the need for local authentication because centralized mechanisms may not be always available. Manual security configuration leads easily to poor security practises as key renewals, password upgrades are easily neglected simply because it is error prone and expensive.
+    \item \textbf{TLS Potential:} TLS, especially with client-server certificates, is a strong candidate for unified security but lacks universal support across all network management protocols and devices. % This was misswritten, my proposal, just say TLS/DTLS as universal stack (better no VPN)
+    \item \textbf{SSH Limitations:} There is no security infrastructure available that would distribute and help verifying the SSH public keys and facilitate flexible re-keying.The security configuration of SSH itself remains to be manual. % verify this statement
+    \item \textbf{Username/Password:} Widely used for basic access and protocols like SNMPv3. Mechanisms for centralized authentication exists but cannot completely replace the need for local authentication because centralized mechanisms may not be always available. Manual security configuration leads easily to poor security practises as key renewals, password upgrades are easily neglected simply because it is error prone and expensive.
 
 \end{itemize}
  
@@ -186,13 +193,7 @@ One unfortunate reality is that some network devices in life networks are actual
  
 \section{Network Management Evolution} \label{insights}
 
-
-% Maybe GenAI and Intents?
-% Other db/api query languages? GraphQL
-% Other, new standard interfaces?
-% More closed-loop Automation?
-% Workflow Programmability and Network APIs (Ericsson message)?
-
+% TODO: Brief intro
 
 \textbf{AI Agents}
 
@@ -228,12 +229,14 @@ This suggests potential applications for retrofitting CoAP on telemetry or manag
 
 \section{Conclusions} \label{conclusions}
 
+% TODO: improve
 This paper has explored the evolving landscape of network management, highlighting the challenges and solutions in scalability, telemetry, and security. The integration of advanced technologies such as AI and machine learning within platforms like the Ericsson Transport Automation Controller (ETAC) demonstrates the potential for enhanced analytics and automation in network operations. However, the complexity of legacy systems and the diversity of data sources present significant hurdles that require innovative approaches, such as standardized schemas and efficient data streaming mechanisms.
 
 The transition towards zero-trust architectures and the adoption of generative AI indicate a shift towards more secure and autonomous network management systems. These advancements necessitate a collaborative effort between industry stakeholders and standardization bodies to ensure seamless integration and widespread adoption. As the network management domain continues to evolve, the focus must remain on developing scalable, secure, and interoperable solutions that can adapt to the dynamic demands of modern telecommunications networks.
 
 \section{Acknowledgments}
 
+% TODO: improve
 We would like to thank Ericsson for their support of this work. Special thanks to ...
 
 
@@ -242,58 +245,3 @@ We would like to thank Ericsson for their support of this work. Special thanks t
 
 \end{document}
 \endinput
-
-
-% NOTES
-
-% ------------------------------------------------------------------------
-% WS CALL
-% ------------------------------------------------------------------------
-% Common protocol themes: YANG, YANG-Push, NMDA, NETCONF, RESTCONF, CORECONF, SZTP, Call-Home, YANG-Library
-
-% Current IETF network management topics:
-% NETCONF (NETwork CONFiguration) WG
-% NETCONF-next, RESTCONF-next, configuration of clients and servers, list pagination, transaction correlation, YANG-push transports (Protocols and YANG models)
-
-% NETMOD (NETwork MODelling) WG
-% YANG-next, YANG versioning, system configuration, data immutability (Language and YANG models)
-% NMOP (Network Management Operations) WG
-% YANG-push integration with Apache Kafka & time series databases, anomaly detection and incident management, digital map modelling
-
-% Network Inventory (IVY) WG
-% Hardware & software components, physical location, etc. correlating with existing IETF models (topolopy, service attachment points)
-
-% Discussion topics will include, but are not limited to:
-% 	•	Tooling, open source, experimentation, proof of concept, multi-vendor interoperability test (e.g., EANTC), and system integration
-% 	•	Data consistency to support richer observability (Data & Knowledge)
-% 	•	Integration issues with the business layer
-% 	•	Automation, orchestration, and autonomy
-% Goal is to Explore new requirements for future network management operations in a collaborative manner with the industry, network operators, and protocol engineers
-
-% Check examples in slides: https://ripe89.ripe.net/wp-content/uploads/presentations/47-RIPE89_Next_Era_of_Network_Management_Operations_Benoit_Claise.pptx
-
-% ------------------------------------------------------------------------
-
-% ------------------------------------------------------------------------
-% MEETING Nov4
-% ------------------------------------------------------------------------
-
-% NEMOPS Paper
-% Signaling using lightweight protocols
-% IVY topic
-% Mention a bit the liaison, industry recognize center of competence. Connection between IETF, … ITUT
-% - Scalability
-% - Query range
-% - Telemetry
-
-% ETAC Telemetry: UDP examples of struggles and issues, fine-grained granular control of what gets push. High level describe what we do currently.  The reality of when developing these products you have to live in the legacy and the new world. Adaptors, many items in nodes are still SNMP, the reality is that u have to deal with a lot of legacy. Network modeling can be agnostic of the protocol used, network modeling can be abstracted to the method u use to the network elements.
-
-% ITUT difference between the models we define in UML and the ones we used in YANG, how things work in a protocol neutral way (MIB, YANG…) the industry was not ready for it back then. If you have a practical example …
-
-% Internally we have an adaptation layer towards the managed devices. 
-% Scott: standardize that?
-% When defining those network level models there should be a mapping between those network level models and device, so that they can be mapped easily. Scalability: optical equipment with 10k interfaces YANG does every poorly. File database with no indexing. Scott has a press about that. Redo the modeling of the bridge. 
-% Compression: YANG to CBOR, something to think, if net elements notifications every 10s the smaller the better, fits also with the telemetry topic.
-
-% Telemetry: Observability to get back records. Do not want to kill the DCN. When you get stuff back, you have a value and put it somewhere, you can do traps, yang push, if you put it in a database, I don't know if we have standard that maps it to that. Tool somewhere that maps. RESTCONF: Got stop time-series databases and relational databases. 
-% GraphQL
