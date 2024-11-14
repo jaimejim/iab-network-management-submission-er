@@ -114,7 +114,7 @@ Even an enhanced solution for this issue will really only be solved by a better 
 
 \textbf{Efficient Data Streaming for Analytics}
 
-The efficient and scalable transfer of analytics data from its source to post-processing systems remains a significant challenge. Legacy network elements predominantly rely on periodic data harvesting, which imposes unnecessary load on the network elements and delays data accessibility. To address this, data sources should implement active streaming of data to post-processing systems immediately upon production. This approach ensures that post-processing systems and closed-loop automation have access to data in near real-time.
+The efficient and scalable transfer of analytics data from its source to post-processing systems remains a significant challenge. Legacy network elements predominantly rely on periodic data harvesting, which imposes unnecessary load on the network elements and delays data accessibility. To address this, the data sources should implement active streaming of analytics data to post-processing systems immediately upon production. This approach ensures that post-processing systems and closed-loop automation have access to data in near real-time.
 
 
 \section{Telemetry} \label{telemetry}
@@ -132,21 +132,20 @@ The efficient and scalable transfer of analytics data from its source to post-pr
 
 \textbf{Quality of data} 
 
-The alignment of analytics data schemas and metadata is essential for efficient post-processing and analytics. Minor differences, such as variations in timestamp formats, can pose challenges. The adoption of standardized, extendable schemas and encodings for various analytics data types would facilitate streamlined data processing across different vendor systems.
+The alignment of analytics data schemas and metadata is essential for efficient post-processing and analytics. Minor differences, such as variations in timestamp formats, can pose challenges in post-processing systems when correlating data from different sources. The adoption of standardized, extendable schemas and encodings for various analytics data types and streams would facilitate streamlined data processing across different vendor systems.
 
-Legacy network elements produce data that may not be fully compatible with modern IT-style post-processing analytics systems. To enhance compatibility, it is beneficial for this data to include embedded metadata providing details such as data originator.
-
-Lastly, while the reliability of telemetry data may be less critical for visualization and manual inspections, it becomes essential when utilized for AI training and assisted network configuration.
-
+Legacy network elements produce analytics data that may not be fully compatible with modern IT-style post-processing analytics systems where post-processing takes place outside the network element. The structure of data records of analytics data streams should be enhanced to include enough embedded metadata to ensure that data can be stored and post-processed in external systems. 
 \textbf{Diversity of data} 
 
 Analytic data is often accessed through a variety of interfaces and standards. This variety presents challenges in streamlining data collection and ingestion processes. This is also true for including metrics which come in various forms like events, alarms, notifications, publications webhooks, logs, and other resource state data.
 
-There is therefore need for an efficient, scalable, and universal transfer system to stream analytics data from its source to post-processing systems.
+There is therefore need for an efficient, scalable, and universal transfer method of streaming theanalytics data from data sources to post-processing systems and other consumers.
 
 \textbf{Lineage of data}
 
-It is essential to establish the lineage and integrity of any record used for purposes beyond visualization. Utilizing data with uncertain integrity can introduce new attack vectors, such as enabling adversaries to exploit closed-loop automation by manipulating the input data. 
+It should also be possible to establish the lineage and integrity of any data to ensure that it can be used safely for any purpose beyond simple visualization such as closed loop automation, AI-training and input for various automatic decision making processes. 
+
+Utilizing data with uncertain integrity can introduce new attack vectors, such as enabling adversaries to exploit closed-loop automation by manipulating the input data. 
 
 Ensuring data integrity across multiple domains is crucial, especially when analytics data traverses cloud provider PaaS functions before reaching post-processing systems.
 
