@@ -11,7 +11,7 @@
 
 
 \title{Evolving Challenges and Solutions in Network Management}
-% Define short authors for page header
+
 \shortauthors{Jiménez et al}
 
 \author{Jaime Jiménez}
@@ -101,21 +101,19 @@ ETAC supports both SBI and NBI through implementations that accommodate legacy p
 
 \section{Scalability} \label{scalability}
 
-% SCOTT please check this
-Scalability in network models, protocols, devices, and systems is a complex issue. For example, optical equipment can have up to 10,000 interfaces, but current models like YANG often fall short because they use file databases without indexing. This highlights the need for standardized network-level models that can be easily mapped to devices, improving scalability across different network architectures. Additionally, integrating legacy systems is a significant challenge, as many network nodes still rely on SNMP, which calls for adaptable and scalable solutions. The difference between stateful and stateless connections adds another layer of complexity to scalability efforts.
- 
 
-\textbf{YANG Schema Mount}
 
-Scalability in YANG presents significant challenges, as highlighted by Boyd \cite{boyd2023scalable}. The concern is about the viability of the current implementation of YANG Schema Mount \cite{RFC8528} and the need to support a mechanism that is better suited for partitioning the data in the hierarchical data tree.
+\textbf{YANG Scalability}
 
-% TODO: This needs to be rewritten more clearly
-Even an enhanced solution for this issue will really only be solved by a better underlying modeling implementation including ACID/transactional, time-series, object-relational views with a query-language and the ability to add triggers or embedded code that becomes part of the solution. The complexity of YANG is intensifying, largely driven by its hierarchical architecture.
+Scalability in YANG is challenging, as noted by Boyd \cite{boyd2023scalable}. YANG validation can be computationally intensive, and performance degrades with large data stores. Models must be tailored for large-scale devices.
+
+The complexity of YANG is largely driven by its hierarchical architecture. For example, optical equipment can have tens of thousands of interfaces, but current models like YANG often fall short because they use file databases without indexing. There is also concern about the viability of the current implementation of YANG Schema-mount \cite{RFC8528} for Optical Network Units (ONU) YANG models, as it seems incompatible with the ONU template technique without editing the YANG modules.
+
+Some modeling challenges can be mitigated by altering the model's structure; however, this often results in backward incompatibility. While YANG features can be adapted or extended to address these issues, doing so introduces additional complexity and also leads to backward incompatibility.
 
 \textbf{Efficient Data Streaming for Analytics}
 
-The efficient and scalable transfer of analytics data from its source to post-processing systems remains a significant challenge. Legacy network elements predominantly rely on periodic data harvesting, which imposes unnecessary load on the network elements and delays data accessibility. To address this, data sources should implement active streaming of data to post-processing systems immediately upon production. This approach ensures that post-processing systems and closed-loop automation have access to data in near real-time.
-
+Legacy network elements predominantly rely on periodic data harvesting, which imposes unnecessary load on the network elements and delays data accessibility. To address this, data sources should implement active streaming of data to post-processing systems immediately upon production, this will also ensure that closed-loop automation systems have access to data in near real-time.
 
 \section{Telemetry} \label{telemetry}
 
@@ -157,14 +155,6 @@ In passive data sources where analytics data is just exposed (as opposite to str
 
 Modern network elements have a lot of state-data which can not be efficiently leveraged through config model notifications. There are components and elements in the applications/data sources, which one does not to expose in a model, but still the analytics data about the state of such components should be available for post-processing systems. For example, one ideally would like to keep the model of cloud service realization agnostic, and use the same model for the cloud service, whether the application-instances of those services run in virtual machines or in container. Having to model compute resources in order to convey the state data would make it very tricky to separate realization and model from each other, and keep the model backwards compatible as the application realizations evolve and technologies change.
 
-% \section{Query Range} \label{queryrange} 
-
-% % Importance of protocol-agnostic network modeling, which allows for a broad query range.
-% % Database storage and retrieval. Time-series storage. 
-% % The meeting discussed the differences between UML-defined models and those used in YANG, focusing on how these models can operate in a protocol-neutral manner.
-
-% TBD!
-
 
 % TODO: Update Security by ETAC
 
@@ -186,11 +176,9 @@ The transition from standards to widespread network deployment is often very slo
  
 \textbf{Zero-Trust Architecture}
 
-Ericsson develops products that are configured to use secure protocols and configurations by default. But we still see in legacy networks that sometimes the transport network is assumed to be secured, trusted, so that a lower degree of security is sometimes accepted. This may work in some networks but the trend is definitely towards zero-trust. 
+Zero trust security, or zero trust architecture (ZTA), mandates "never trust, always verify," ensuring no default trust for users or devices, even on permissioned networks. Ericsson develops products that are configured to use secure protocols and configurations by default. 
 
-Regulators and local legislation is also setting new requirements for critical infrastructure, such as telecom networks. The interest is not only on the security capabilities required from the network devices but also development processes, documentation, FOSS usage, security assurance and various aspects of the way how networks are deployed and managed.
-
-One unfortunate reality is that some network devices in life networks are actually very old. If the network operates correctly, any upgrade or change to it may start looking like a risk. This may lead to neglection of software and security upgrades. This could work in the walled-garden paradigm but definitely not anymore in zero-trust. Continuous deployments and upgrades are the only path to truly secure networks. And all this would need to be automated in secure way, covering the software upgrades, re-configurations and testing.
+Some operational networks still rely on outdated devices, and any attempt to upgrade or modify these systems is often perceived as a risk, resulting in the neglect of essential software and security updates. While this approach might have been viable within a walled-garden security paradigm, it is incompatible with the zero-trust framework.
 
  
 \section{Network Management Evolution} \label{insights}
@@ -199,13 +187,15 @@ The evolution of network management could be influenced by advancements in AI an
 
 \textbf{AI Agents}
 
-Zero-shot LLMs are are already used to make operator insights more accessible, to streamline incident management or to generate task-specific code from natural language queries. As the industry progresses in the recent GenAI path, agentic architectures will be integrated into network AI systems, adhering to the autonomic networking principles specified in RFC7575 \cite{RFC7575}.
+The advent of Large Language Models (LLMs) presents an opportunity for autonomous networking and network management. LLMs are already employed to enhance operator insights, streamline incident management, and generate task-specific code from natural language queries. As the industry advances along the GenAI path, these capabilities will be further augmented by integrating agentic architectures into network AI systems.
+
+LLMs enable the creation of AI agents that are capable of decomposing user intents into executable individual steps and can interact autonomously with other systems through well-known interfaces (e.g., Network and Management APIs). This integration aligns with the autonomic networking principles outlined in RFC7575 \cite{RFC7575}, facilitating more efficient and adaptive network management.
 
 \begin{quote}
 "The fundamental goal is self-management, including self-configuration, self-optimization, self-healing, and self-protection." 
 \end{quote}
 
-Agentic systems are characterized by AI agents that are capable of decomposing user intents into executable individual steps and can interact autonomously with other systems through well-known interfaces (e.g., Network and Management APIs). Agents can further federate and specialize in multi-agent systems, which improve on challenges such as hallucinations, specialization, and scalability. The interest in multi-agent systems was reflected during the past IETF 121 side meeting, as detailed in the ai4network agenda \cite{ai4network-agenda}. 
+Furthermore, agents can federate and specialize in multi-agent systems, which improve on challenges such as hallucinations, specialization, and scalability. The interest in multi-agent systems was reflected during the past IETF 121 side meeting, as detailed in the ai4network agenda \cite{ai4network-agenda}. 
 
 \begin{figure}[h]
   \centering
@@ -216,9 +206,15 @@ Agentic systems are characterized by AI agents that are capable of decomposing u
 
 Agents are particularly useful in the telecommunications sector, where the complexity of specifications and codebases demands innovative solutions. Moreover, the current trend in 5G Networks is marked by a shift towards exposing network functionalities through APIs. This trend facilitates the integration of agentic systems that can dynamically interact with these APIs.
 
+Challenges in this domain include aligning intents from various sources that may have conflicting objectives and ensuring AI outputs are free from hallucinations. The latter is addressed by incorporating fact-checking, dataset tagging, human-in-the-loop solutions, and other verification mechanisms. On top of that it is likely that there will be incremental improvements on each of the components of an agent, both in planning, memory and tooling.
+
+Moreover, there are limitations in terms of control of the most advanced LLMs which are the foundation of these types of agents, it is likely that privacy concerns and lack of in-house LLM deployments limits the usage.
+
 \textbf{CoRECONF}
 
-CoRECONF, in particular,is utilized by constrained devices in Low-Power and Lossy Networks, which are typically composed of numerous embedded devices with limited power and memory. 
+There is potential for retrofitting Internet of Things (IoT) oriented protocols on telemetry or management-type signaling within the network management domain. For example in UDP evinronments and in environments where compression and smaller payloads are welcomed. 
+
+In particular, CoRECONF is utilized by constrained devices in Low-Power and Lossy Networks, which are typically composed of numerous embedded devices with limited power and memory. 
 
 The the Constrained Application Protocol (CoAP) \cite{RFC7252}, a component of CoRECONF, is primarily utilized in IoT applications, it has also been specified for signaling DDoS-related telemetry \cite{RFC9132} and \cite{RFC9362}, as documented by the now-concluded DOTS Working Group. 
 
@@ -230,7 +226,7 @@ Within the network management community, the -CONF ecosystem is predominantly ch
   \item \textbf{CoRECONF} \cite{draft-ietf-core-comi}: Serializing YANG modules in a CBOR \cite{RFC9254} map over stateless CoAP.
 \end{itemize}
 
-This suggests potential applications for retrofitting CoAP on telemetry or management-type signaling within the network management domain. Specially in UDP-oriented evinronments as CoAP comes with an additional reliability mechanism and in environments where compression and smaller payloads are welcomed. 
+
 
 \section{Conclusions} \label{conclusions}
 
@@ -242,9 +238,7 @@ The transition towards zero-trust architectures and the adoption of generative A
 
 \section{Acknowledgments}
 
-% TODO: improve
-We would like to thank Ericsson for their support of this work. Special thanks to ...
-
+We would like to express our gratitude to Ericsson for their support of this work. Special thanks to Jari Arkko for his insightful review.
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{paper}
