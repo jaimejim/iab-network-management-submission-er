@@ -80,7 +80,9 @@ The IAB workshop on the Next Era of Network Management Operations (NEMOPS) serve
 
 In this paper, we introduce a comprehensive analysis of the current challenges and emerging solutions in network management from the point of view of an SDN controller product. The subsequent sections delve into various aspects of network management and operations. The \textbf{Overall Architecture} section \ref{overview} provides a detailed overview of the standard components within a network management controller, the Ericsson Transport Automation Controller (ETAC). The \textbf{Scalability} section \ref{scalability} examines the challenges of scaling network models and protocols, highlighting the need for standardized models. The \textbf{Telemetry} section \ref{telemetry} discusses the complexities of data transmission. The \textbf{Security} section \ref{security} raises some security challenges and explains the shift towards zero-trust architectures. Finally, the \textbf{Network Management Evolution} section \ref{insights} explores potential future trends, including the role of generative AI and new standard interfaces.
 
-\subsection{ETAC overal Architecture} \label{overview}
+
+
+\subsection{ETAC overall Architecture} \label{overview}
 
 Ericsson Transport Automation Controller (ETAC) ~\cite{ericsson-etac} is a cloud-native Transport Automation and SDN Controller that leverages artificial intelligence and machine learning to deliver advanced analytics and automation functionalities across microwave, IP, and optical fronthaul networks.
 
@@ -97,7 +99,7 @@ On the SBI it communicates with the managed nodes and it also is capable of tran
 
 On the NBI it offers an exposure layer to users over a friendly GUI as well as to various OSS applications, providing access both to the network data and to the functionality supported in the system and enabling integration with other platforms. 
 
-ETAC supports both SBI and NBI through implementations that accommodate legacy protocols and information models, whether defined by SOD or specific to vendors. It also provides real-time network observability, facilitating network analytics and closed-loop automation. It currently supports use cases that utilize its built-in real-time observability features to gain network insights through AI/ML and implement closed-loop automation in Transport Networks, all within a zero-trust framework.
+ETAC supports both SBI and NBI through implementations that accommodate legacy protocols and information models, whether defined by a Standards Developing Organization (SDO) or by specific to vendors. It also provides real-time network observability, facilitating network analytics and closed-loop automation. It currently supports use cases that utilize its built-in real-time observability features to gain network insights through AI/ML and implement closed-loop automation in Transport Networks, all within a zero-trust framework.
 
 \section{Scalability} \label{scalability}
 
@@ -118,45 +120,24 @@ Legacy network elements predominantly rely on periodic data harvesting, which im
 \section{Telemetry} \label{telemetry}
 
 
-% TODO: BRIEF Intro
-% The challenges of using UDP for telemetry.
-% Need for fine-grained control over data transmission.
-% Handling of mmulti-protocol data and reporting mechanisms. Traps, YANG push, webhooks
-% YANG to CBOR dictionary for compression and the implications of frequent notifications.
-% Signaling using lightweight protocols
+\textbf{Protocol efficiency} 
 
-% TODO: IMO the data part is to heavy with content specific for ETAC. We sould need some high-level general issues.
-% SCOTT, please input here.
+In high-rate telemetry use cases, line protocol efficiency is a key consideration. With NETCONF, the verbose nature of the XML encoding implies both added processing overhead in server and client, and increased bandwidth requirement on the DCN channel. Techniques for reducing the processing and bandwidth requirements should be considered in future work. One example of the importance of efficiency is is gRPC, which has gained popularity in telemetry applications largely due to its line protocol efficiency.
 
-\textbf{Quality of data} 
-
-The alignment of analytics data schemas and metadata is essential for efficient post-processing and analytics. Minor differences, such as variations in timestamp formats, can pose challenges. The adoption of standardized, extendable schemas and encodings for various analytics data types would facilitate streamlined data processing across different vendor systems.
-
-Legacy network elements produce data that may not be fully compatible with modern IT-style post-processing analytics systems. To enhance compatibility, it is beneficial for this data to include embedded metadata providing details such as data originator.
-
-Lastly, while the reliability of telemetry data may be less critical for visualization and manual inspections, it becomes essential when utilized for AI training and assisted network configuration.
-
-\textbf{Diversity of data} 
-
-Analytic data is often accessed through a variety of interfaces and standards. This variety presents challenges in streamlining data collection and ingestion processes. This is also true for including metrics which come in various forms like events, alarms, notifications, publications webhooks, logs, and other resource state data.
-
-There is therefore need for an efficient, scalable, and universal transfer system to stream analytics data from its source to post-processing systems.
-
-\textbf{Lineage of data}
-
-It is essential to establish the lineage and integrity of any record used for purposes beyond visualization. Utilizing data with uncertain integrity can introduce new attack vectors, such as enabling adversaries to exploit closed-loop automation by manipulating the input data. 
-
-Ensuring data integrity across multiple domains is crucial, especially when analytics data traverses cloud provider PaaS functions before reaching post-processing systems.
-
-\textbf{State-Data Handling}
-
-% TODO: This needs to be rewritten more clearly
-In passive data sources where analytics data is just exposed (as opposite to streamed) the data has to be actively harvested by external entities, thus there must be APIs or interfaces for collection of such data. In systems where data is streamed, the data sources (often involved in critical functions such as traffic handling) do not need to expose interfaces for harvesting analytics data, which makes the attack surface smaller and system more secure in general.
-
-Modern network elements have a lot of state-data which can not be efficiently leveraged through config model notifications. There are components and elements in the applications/data sources, which one does not to expose in a model, but still the analytics data about the state of such components should be available for post-processing systems. For example, one ideally would like to keep the model of cloud service realization agnostic, and use the same model for the cloud service, whether the application-instances of those services run in virtual machines or in container. Having to model compute resources in order to convey the state data would make it very tricky to separate realization and model from each other, and keep the model backwards compatible as the application realizations evolve and technologies change.
+Similarly, the choice of transport protocol has a key impact on the processing and bandwidth requirements. TCP, even though more reliable, is heavier in processing and on the line so often UDP would be preferred for transport in telemetry applications. With UDP, however, additional mechanisms may be needed on application layer to compensate for the unreliable transport and to handle e.g. packet drops and reorderings, in order not to lose critical data, and these mechanism may in turn result in losing the benefits of the lighter transport layer. There's thus a fine balance between when to use UDP vs. TCP and the choice should be based on careful consideration of all these factors.
 
 
-% TODO: Update Security by ETAC
+\textbf{Quality and integrity of the data} 
+
+The alignment of telemetry data across different sources and subsystems is essential for efficient post-processing of the data. This calls for more coordination in the development of YANG data models, e.g. in order to be able to represent the necessary associations between YANG modules developed in different groups and the schemas of the records, so that the data can be linked correctly and efficiently in post-processing. Also what should be taken into account is the lineage and integrity in the streamed data records, e.g. to not introduce new attack vectors by enabling adversaries to exploit closed-loop automation by manipulating the telemetry data.
+
+\textbf{Flexibility}
+
+The amount of configuration, state and performance data available and produced in modern network elements is ever-increasing, and ability to have all this data available for network management, analytics and automation applications is crucial in managing the complexity of networks today and in the future. Thus, the protocols and mechanisms developed for streaming telemetry should be optimized to support high-rate streaming of large volumes of data efficiently. 
+
+The potentially high volume of data also calls for ability to have fine-grain control on what data gets streamed. Different applications are interested in different subsets of the data, may need it at different frequency or their needs may e.g. be adaptive according to the condition of the network. Also, there's often a tradeoff between the needs of an application and what can be delivered e.g. due to the limited DCN bandwidth available in the network. Being able to exactly
+choose what gets streamed and when helps to overcome these challenges.
+
 
 \section{Security challenges} \label{security}
 
@@ -165,7 +146,7 @@ Security configuration in network management is complex due to the absence of a 
 \begin{itemize}
     \item \textbf{Diverse Protocols:} Network management applications must accommodate various security protocols, such as TLS/DTLS, SSH, and username/password mechanisms.
     \item \textbf{TLS/DTLS:} TLS/DTLS, particularly with client-server certificates, is a promising candidate for unified security. However, some vendors opt for alternative security techniques, such as VPNs.
-    \item \textbf{SSH Limitations:} There is no security infrastructure available that would distribute and help verifying the SSH public keys and facilitate flexible re-keying.The security configuration of SSH itself remains to be manual. % verify this statement there are things like hashicorp https://www.vaultproject.io
+    \item \textbf{SSH Limitations:} Security infrastructure to distribute and help verifying the SSH public keys and to facilitate flexible re-keying is not commonly in use, probably due to complexity.The security configuration of SSH itself remains to be manual.
     \item \textbf{Username/Password:} Commonly used for basic access and protocols like SNMPv3. Centralized authentication exists but cannot fully replace local authentication due to potential unavailability. Manual configuration often results in poor security practices, as key renewals and password updates are prone to errors and costly.
 
 \end{itemize}
@@ -178,12 +159,21 @@ The transition from standards to widespread network deployment is often very slo
 
 Zero trust security, or zero trust architecture (ZTA), mandates "never trust, always verify," ensuring no default trust for users or devices, even on permissioned networks. Ericsson develops products that are configured to use secure protocols and configurations by default. 
 
-Some operational networks still rely on outdated devices, and any attempt to upgrade or modify these systems is often perceived as a risk, resulting in the neglect of essential software and security updates. While this approach might have been viable within a walled-garden security paradigm, it is incompatible with the zero-trust framework.
+In legacy networks, sometimes the transport network is assumed to be secured, trusted, so that lower security can be accepted. This may work in some networks but the trend is definitely towards zero-trust. Regulators and local legislation is also setting new requirements for critical infrastructure, such as telecom networks. The interest is not only on the security capabilities required from the network devices but also development processes, documentation, FOSS usage, security assurance and various aspects of the way how networks are deployed and managed.
 
- 
 \section{Network Management Evolution} \label{insights}
 
-The evolution of network management could be influenced by advancements in AI and machine learning, as well as potential retrofitting of other protocols intended for constrained environments. These developments promise enhanced automation and scalability for telecommunications networks.
+The evolution of network management and automation could be influenced by advancements in AI and machine learning, as well as potential retrofitting of other protocols intended for constrained environments. These developments promise enhanced automation and scalability for telecommunications networks.
+
+
+\textbf{AI/ML/Analytics for enhanced observability and network insights}
+
+Legacy network management platforms ingest different types of PM, FM, events data generated by network elements and in most cases legacy network managers leave the interpretation and correlation of that data to humans. 
+
+AI/ML techniques like anomaly detection, classification, prediction, etc can be run over time series data, network topology and inventory data to detect and predict network events by looking at anomalies, patterns in data, forecasting trend, etc. 
+
+The AI/MLs/Analytics generated data can then be used to produce network insights in general, being some of those also actionable (closed loop automations).
+
 
 \textbf{AI Agents}
 
@@ -205,6 +195,8 @@ Furthermore, agents can federate and specialize in multi-agent systems, which im
 \end{figure}
 
 Agents are particularly useful in the telecommunications sector, where the complexity of specifications and codebases demands innovative solutions. Moreover, the current trend in 5G Networks is marked by a shift towards exposing network functionalities through APIs. This trend facilitates the integration of agentic systems that can dynamically interact with these APIs.
+
+The multi-agent domain could also have applications in networks, CSP Transport Networks are typically very heterogeneous with a combination of Transport domains (Microwave, IP, Optical) and equipment vendor. Therefore domain/vendor specific agents can be trained. SDN platforms can then perform orchestration the specialized agents to achieve overall better performance in heterogenous networks.
 
 Challenges in this domain include aligning intents from various sources that may have conflicting objectives and ensuring AI outputs are free from hallucinations. The latter is addressed by incorporating fact-checking, dataset tagging, human-in-the-loop solutions, and other verification mechanisms. On top of that it is likely that there will be incremental improvements on each of the components of an agent, both in planning, memory and tooling.
 
